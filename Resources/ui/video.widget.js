@@ -1,42 +1,30 @@
 exports.create = function(_args) {
 	if (Ti.Network.online == false || !_args.mp4)
 		return;
+	var url = _args.mp4;
+	if (Ti.Android && _args.rtsp) {
+		//url = _args.rtsp;
+	}
+	console.log(url);
 	var win = Ti.UI.createWindow({
 		backgroundColor : 'white',
 		orientationModes : [Ti.UI.LANDSCAPE_RIGHT, Ti.UI.LANDSCAPE_LEFT]
 	});
-	var style;
-	if (Ti.Platform.name === 'iPhone OS') {
-		style = Ti.UI.iPhone.ActivityIndicatorStyle.DARK;
-	} else {
-		style = Ti.UI.ActivityIndicatorStyle.DARK;
-	}
-	var activityIndicator = Ti.UI.createActivityIndicator({
-		color : 'green',
-		font : {
-			fontFamily : 'Helvetica Neue',
-			fontSize : 26,
-			fontWeight : 'bold'
-		},
-		message : 'Loading...',
-		style : style,
-		top : 10,
-		left : 10,
-		height : Ti.UI.SIZE,
-		width : Ti.UI.SIZE
-	});
+	win.add(Ti.UI.createImageView({
+		image : _args.poster
+	}));
 	var videoplayer = Ti.Media.createVideoPlayer({
 		autoplay : true,
 		fullscreen : true,
 		backgroundColor : '#333',
-		orientationModes : [Ti.UI.LANDSCAPE_RIGHT, Ti.UI.LANDSCAPE_LEFT],
-		url : _args.mp4,
+		url : url,
 		mediaControlStyle : Ti.Media.VIDEO_CONTROL_DEFAULT,
-		scalingMode : Ti.Media.VIDEO_SCALING_FIT
+		scalingMode : Ti.Media.VIDEO_MODE_FILL
 	});
-	win.add(activityIndicator);
-	videoplayer.addEventListener('preload', function() {
-		win.add(videoplayer);
+
+	videoplayer.addEventListener('playbackstate', function(_e) {
+		//	win.add(videoplayer);
+		console.log(_e.playbackState);
 	});
 	videoplayer.addEventListener('complete', function(e) {
 		if (e.reason == 0) {

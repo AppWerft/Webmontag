@@ -14,7 +14,15 @@ exports.create = function() {
 		backgroundImage : '/assets/logo.png',
 		height : w / 6.5
 	});
-
+	var memberstotal = Ti.UI.createLabel({
+		left : '10dp',
+		bottom : '10dp',color:'red',
+		font : {
+			fontSize : '23dp',
+			fontFamily : 'KenyanCoffeeRg-Regular'
+		}
+	});
+	logo.add(memberstotal);
 	self.open();
 	var template = require('ui/templates').events;
 	self.listview = Ti.UI.createListView({
@@ -41,5 +49,8 @@ exports.create = function() {
 			title : 'Online'
 		}).show();
 	}
+	Ti.App.Model.getMembersTotal(function(_total) {
+		memberstotal.setText(_total + ' Mitglieder');
+	});
 	return self;
 };

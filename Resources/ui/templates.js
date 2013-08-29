@@ -7,7 +7,7 @@ exports.events = {
 		type : 'Ti.UI.ImageView',
 		bindId : 'logo',
 		properties : {
-			height : Ti.UI.SIZE,
+			height : Ti.UI.SIZE,	bubbles : true,
 			width : '90dp',
 			left : 0
 		}
@@ -32,6 +32,7 @@ exports.events = {
 		properties : {
 			color : '#666',
 			height : Ti.UI.SIZE,
+			bubbles : true,
 			font : {
 				fontSize : '16dp',
 				fontFamily : 'KenyanCoffeeRg-Regular'
@@ -70,7 +71,7 @@ exports.session = {
 			},
 			left : "100dp",
 			right : '20dp',
-			width : Ti.UI.FILL,
+			width : Ti.UI.FILL,	bubbles : true,
 			top : '5dp',
 			right : '15dp'
 		},
@@ -91,4 +92,4 @@ exports.session = {
 		},
 	}]
 
-}; 
+};

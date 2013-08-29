@@ -20,7 +20,7 @@ exports.create = function(_event) {
 	if (_event.sessions) {
 		var items = [], sections = [];
 		for (var i = 0; i < _event.sessions.length; i++) {
-			var session = _event.sessions[i]
+			var session = _event.sessions[i];
 			items.push({
 				template : 'session',
 				title : {
@@ -33,22 +33,20 @@ exports.create = function(_event) {
 					image : session.image
 				},
 				properties : {
-					allowsSelection : true,
+					//allowsSelection : true,
 					accessoryType : (session.mp4) ? Ti.UI.LIST_ACCESSORY_TYPE_DETAIL : Ti.UI.LIST_ACCESSORY_TYPE_NONE,
-					itemId : (session.mp4) ? JSON.stringify(session) : null
+					itemId : (session.mp4) ? JSON.stringify(session) : {}
 				}
 			});
 		}
-		console.log(items);
 		sections[0] = Ti.UI.createListSection({
 			items : items
 		});
 		self.listview.setSections(sections);
 	}
 	self.listview.addEventListener('itemclick', function(_e) {
-		require('ui/video.widget').create(JSON.parse(_e));
+		require('ui/video.widget').create(JSON.parse(_e.itemId));
 	});
-	console.log('Info: eventwindow ready');
 	setTimeout(function() {
 		if (_event.gallery && _event.gallery.length) {
 			var gal = require('ui/gallery').create(_event, W, H);
