@@ -42,6 +42,9 @@ exports.create = function(_event, _W, _H) {
 			views : views
 		});
 		win.add(container);
+		win.addEventListener('longpress', function() {
+			win.close();
+		});
 	});
 	return self;
 };

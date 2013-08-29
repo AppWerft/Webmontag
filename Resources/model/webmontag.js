@@ -9,7 +9,8 @@ WebMon.prototype.getAll = function(_args) {
 			var events = JSON.parse(file.read().text);
 			_args.onload(events);
 		} catch(E) {
-		console.log('Warning: invalide events');
+			console.log('Warning: invalide events');
+		}
 	}
 	var url = 'http://www.webmontag-hamburg.de/events.json';
 	var xhr = Ti.Network.createHTTPClient({
@@ -27,12 +28,20 @@ WebMon.prototype.getAll = function(_args) {
 };
 
 WebMon.prototype.getMembersTotal = function(_callback) {
+	var self = this;
+	if (Ti.App.Properties.hasProperty('total'))
+		_callback(Ti.App.Properties.getString('total'));
 	var xhr = Ti.Network.createHTTPClient({
 		onload : function() {
+			console.log(this.responseText);
 			var regex = /counter\((.*?)\)/;
 			var res = this.responseText.match(regex);
-			if (res)
+			console.log(res);
+			if (res && res[1]) {
+				Ti.App.Properties.setString('total', res[1]);
 				_callback(res[1]);
+			}
+			setTimeout(self.getMembersTotal, 300000);
 		}
 	});
 	xhr.open('GET', 'http://transfer.renesasse.com/get_wmhh_count.php?callback=counter');

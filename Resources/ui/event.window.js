@@ -60,12 +60,12 @@ exports.create = function(_event) {
 			});
 		}
 	}, 100);
-	var photograph;
+	var photograph = undefined;
 	if (_event.photograph && _event.gallery && _event.gallery.length) {
 		photograph = Ti.UI.createLabel({
 			text : '\nPhotograph:\n' + _event.photograph,
 			top : H - 1,
-			color : 'white',
+			color : 'white',height:H,
 			shadowOffset : {
 				x : '2dp',
 				y : '2dp'
@@ -81,6 +81,8 @@ exports.create = function(_event) {
 			left : '20dp'
 		});
 		self.add(photograph);
-	}
+	}self.addEventListener('longpress', function() {
+			self.close();
+		});
 	return self;
 };

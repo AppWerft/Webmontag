@@ -7,7 +7,8 @@ exports.events = {
 		type : 'Ti.UI.ImageView',
 		bindId : 'logo',
 		properties : {
-			height : Ti.UI.SIZE,	bubbles : true,
+			height : Ti.UI.SIZE,
+			bubbles : true,
 			width : '90dp',
 			left : 0
 		}
@@ -18,7 +19,7 @@ exports.events = {
 			color : '#666',
 			height : Ti.UI.SIZE,
 			font : {
-				fontSize : '23dp',
+				fontSize : (Ti.Android) ? '23dp' : 19,
 				fontFamily : 'KenyanCoffeeRg-Regular'
 			},
 			left : "100dp",
@@ -66,12 +67,13 @@ exports.session = {
 			color : '#666',
 			height : '60dp',
 			font : {
-				fontSize : '23dp',
+				fontSize : (Ti.Android) ? '23dp' : 19,
 				fontFamily : 'KenyanCoffeeRg-Regular'
 			},
 			left : "100dp",
 			right : '20dp',
-			width : Ti.UI.FILL,	bubbles : true,
+			width : Ti.UI.FILL,
+			bubbles : true,
 			top : '5dp',
 			right : '15dp'
 		},
