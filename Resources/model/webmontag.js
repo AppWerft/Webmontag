@@ -28,20 +28,22 @@ WebMon.prototype.getAll = function(_args) {
 };
 
 WebMon.prototype.getMembersTotal = function(_callback) {
-	var self = this;try {
-	if (Ti.App.Properties.hasProperty('total')) {
-		var eventsstring = Ti.App.Properties.getString('total'); 
-		_callback(JSON.parse(eventsstring));
-	}} catch(E) {}
+	var self = this;
+	try {
+		if (_callback && ( typeof (_callback) == 'function') && Ti.App.Properties && Ti.App.Properties.hasProperty('total')) {
+			_callback(JSON.parse(Ti.App.Properties.getString('total')));
+		}
+	} catch(E) {
+		console.log(E);
+	}
+	console.log('Info: try to get new membercount');
 	var xhr = Ti.Network.createHTTPClient({
 		onload : function() {
-			console.log(this.responseText);
-			var regex = /counter\((.*?)\)/;
-			var res = this.responseText.match(regex);
-			console.log(res);
+			var res = this.responseText.match(/counter\((.*?)\)/);
 			if (res && res[1]) {
 				Ti.App.Properties.setString('total', res[1]);
-				_callback(res[1]);
+				if (_callback && ( typeof (_callback) == 'function'))
+					_callback(res[1]);
 			}
 			setTimeout(self.getMembersTotal, 300000);
 		}
