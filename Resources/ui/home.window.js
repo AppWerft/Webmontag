@@ -6,7 +6,7 @@ exports.create = function() {
 		fullscreen : true,
 		orientationModes : [Ti.UI.PORTRAIT],
 		exitOnClose : true,
-		backgroundColor : '#fff'
+		backgroundColor : '#ddd'
 	});
 	var logo = Ti.UI.createView({
 		top : 0,
@@ -34,5 +34,12 @@ exports.create = function() {
 	});
 	require('ui/home.listview').update(self.listview);
 	self.add(logo);
+	if (Ti.Network.online == false) {
+		var dialog = Ti.UI.createAlertDialog({
+			message : 'Die App benötigt das Internet.',
+			ok : 'Okay',
+			title : 'Online'
+		}).show();
+	}
 	return self;
-}
+};

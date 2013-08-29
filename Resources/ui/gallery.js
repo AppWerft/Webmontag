@@ -15,7 +15,7 @@ exports.create = function(_event, _W, _H) {
 	if (_event.gallery && _event.gallery.length) {
 		for (var i = 0; i < _event.gallery.length; i++) {
 			var mini = Ti.UI.createImageView({
-				image : _event.gallery[i],
+				image : 'http://www.webmontag-hamburg.de/tl_files/galerie/' + _event.gallery[i],
 				defaultImage : '/assets/logobg.png',
 				width : _W,
 				left : 0,
@@ -28,14 +28,14 @@ exports.create = function(_event, _W, _H) {
 	self.addEventListener('click', function() {
 		var win = Ti.UI.createWindow({
 			fullscreen : true,
-			title : 'Webmontag ' + _event.datalong + ',  Photograph:' + _event.photograph,
+			title : 'Webmontag ' + _event.datelong + ',  Photograph:' + _event.photograph,
 			orientationModes : [Ti.UI.LANDSCAPE_RIGHT, Ti.UI.LANDSCAPE_LEFT]
 		});
 		win.open();
 		var views = [];
 		for (var i = 0; i < _event.gallery.length; i++) {
 			views.push(Ti.UI.createImageView({
-				image : _event.gallery[i]
+				image : 'http://www.webmontag-hamburg.de/tl_files/galerie/' + _event.gallery[i]
 			}));
 		}
 		var container = Ti.UI.createScrollableView({
@@ -44,4 +44,4 @@ exports.create = function(_event, _W, _H) {
 		win.add(container);
 	});
 	return self;
-}
+};

@@ -2,7 +2,8 @@
 
 (function() {
 	console.log('Info: Starting App ============================');
-	Ti.UI.orientation = Ti.UI.PORTRAIT;	
+	
+	Ti.UI.orientation = Ti.UI.PORTRAIT;
 	var modelObj = require('model/webmontag');
 	Ti.App.Model = new modelObj();
 	require('ui/home.window').create();
