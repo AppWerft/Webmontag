@@ -3,9 +3,27 @@ var WebMon = function() {
 };
 
 WebMon.prototype.getAll = function(_args) {
-	var events = JSON.parse(Ti.Filesystem.getFile(Ti.Filesystem.resourcesDirectory, 'model/events.json').read().text);
-	console.log('Info: ' + events.length + ' events');
-	_args.onload(events);
+	var file = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory, 'events.json');
+	if (file) {
+		try {
+			var events = JSON.parse(file.read().text);
+			_args.onload(events);
+		} catch(E) {
+		console.log('Warning: invalide events');
+	}
+	var url = 'http://www.webmontag-hamburg.de/events.json';
+	var xhr = Ti.Network.createHTTPClient({
+		onload : function() {
+			try {
+				var events = JSON.parse(this.responseText);
+				file.write(this.respinseText);
+				_args.onload(events);
+			} catch(E) {
+			}
+		}
+	});
+	xhr.open('GET', url);
+	xhr.send(null);
 };
 
 WebMon.prototype.getMembersTotal = function(_callback) {
