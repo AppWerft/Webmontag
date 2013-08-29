@@ -2,10 +2,15 @@
 
 (function() {
 	console.log('Info: Starting App ============================');
-	
 	Ti.UI.orientation = Ti.UI.PORTRAIT;
-	var modelObj = require('model/webmontag');
-	Ti.App.Model = new modelObj();
+	var Webmontag = require('model/webmontag');
+	Ti.App.Model = new Webmontag();
+	
+	Ti.App.Xing = require('vendor/social').create({
+		site : 'xing',
+		consumerSecret : Ti.App.Properties.getString('xing.appsecret'),
+		consumerKey : Ti.App.Properties.getString('xing.appid')
+	});
 	require('ui/home.window').create();
 })();
 

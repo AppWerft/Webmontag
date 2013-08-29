@@ -16,7 +16,8 @@ exports.create = function() {
 	});
 	var memberstotal = Ti.UI.createLabel({
 		left : '10dp',
-		bottom : '10dp',color:'red',
+		bottom : '10dp',
+		color : 'red',
 		font : {
 			fontSize : '23dp',
 			fontFamily : 'KenyanCoffeeRg-Regular'
@@ -49,6 +50,11 @@ exports.create = function() {
 			title : 'Online'
 		}).show();
 	}
+	logo.addEventListener('click', function() {
+		if (!Ti.App.Xing.isAuthorized()) {
+			Ti.App.Xing.authorize();
+		}
+	});
 	Ti.App.Model.getMembersTotal(function(_total) {
 		memberstotal.setText(_total + ' Mitglieder');
 	});
