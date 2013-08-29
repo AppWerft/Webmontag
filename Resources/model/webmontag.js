@@ -16,7 +16,7 @@ WebMon.prototype.getAll = function(_args) {
 		onload : function() {
 			try {
 				var events = JSON.parse(this.responseText);
-				file.write(this.respinseText);
+				file.write(this.responseText);
 				_args.onload(events);
 			} catch(E) {
 			}
