@@ -2,10 +2,6 @@ exports.create = function(_args) {
 	if (Ti.Network.online == false || !_args.mp4)
 		return;
 	var url = _args.mp4;
-	if (Ti.Android && _args.rtsp) {
-		//url = _args.rtsp;
-	}
-	console.log(url);
 	var win = Ti.UI.createWindow({
 		backgroundColor : 'white',
 		orientationModes : [Ti.UI.LANDSCAPE_RIGHT, Ti.UI.LANDSCAPE_LEFT]
@@ -21,9 +17,7 @@ exports.create = function(_args) {
 		mediaControlStyle : Ti.Media.VIDEO_CONTROL_DEFAULT,
 		scalingMode : Ti.Media.VIDEO_MODE_FILL
 	});
-
 	videoplayer.addEventListener('playbackstate', function(_e) {
-		//	win.add(videoplayer);
 		console.log(_e.playbackState);
 	});
 	videoplayer.addEventListener('complete', function(e) {

@@ -28,9 +28,11 @@ WebMon.prototype.getAll = function(_args) {
 };
 
 WebMon.prototype.getMembersTotal = function(_callback) {
-	var self = this;
-	if (Ti.App.Properties.hasProperty('total'))
-		_callback(Ti.App.Properties.getString('total'));
+	var self = this;try {
+	if (Ti.App.Properties.hasProperty('total')) {
+		var eventsstring = Ti.App.Properties.getString('total'); 
+		_callback(JSON.parse(eventsstring));
+	}} catch(E) {}
 	var xhr = Ti.Network.createHTTPClient({
 		onload : function() {
 			console.log(this.responseText);
