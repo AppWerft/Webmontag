@@ -26,7 +26,6 @@
  * social media service provider for the OAuth protocol, used when calling `create`.
  *
  *
-
  */
 
 function hex_sha1(s) {
@@ -398,8 +397,10 @@ var OAuthAdapter = function(pConsumerSecret, pConsumerKey, pSignatureMethod) {
 	}
 
 	function authorizeUICallback(e) {
-		var response = e.source.evalJS('(p = document.getElementById("oauth_pin")) && p.innerHTML;');
-		response ? ( pin = response.split("<code>")[1].split("</code>")[0], destroyAuthorizeUI(), receivePinCallback()) : (loadingView && loadingView.hide(), loadingContainer && loadingContainer.hide(), webView && webView.show()), loading = !1, clearInterval(intervalID), estimates[estimateID] = (new Date).getTime() - startTime, Ti.App.Properties.setString("Social-LoadingEstimates", JSON.stringify(estimates));
+		var response = e.source.evalJS('(p = document.getElementById("verifier")) && p.innerHTML;');
+		console.log(response);
+		response ? ( pin = response, destroyAuthorizeUI(), receivePinCallback()) 
+		: (loadingView && loadingView.hide(), loadingContainer && loadingContainer.hide(), webView && webView.show()), loading = !1, clearInterval(intervalID), estimates[estimateID] = (new Date).getTime() - startTime, Ti.App.Properties.setString("Social-LoadingEstimates", JSON.stringify(estimates));
 	}
 
 	var consumerSecret = pConsumerSecret, consumerKey = pConsumerKey, signatureMethod = pSignatureMethod, pin = null, requestToken = null, requestTokenSecret = null, accessToken = null, accessTokenSecret = null, accessor = {
