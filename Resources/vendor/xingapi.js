@@ -1,10 +1,10 @@
 /**
  * @class Alloy.builtins.social
  * A collection of useful social media provider utilities. Currently, this module only supports
- * Twitter and the following features:
+ * XING and the following features:
  *
- * - Logging into Twitter and authorizing the application through the OAuth protocol.
- * - Posting tweets to the user's Twitter account.
+ * - Logging into XING and authorizing the application through the OAuth protocol.
+ * - Posting tweets to the user's XING account.
  *
  * To use the social builtin library, require it with the `alloy` root
  * directory in your `require` call. For example:
@@ -19,34 +19,14 @@
  * To use a social media provider, a user must log in and authorize the application to perform
  * certain actions, such as accessing profile information or posting messages.
  *
- * Call `authorize` to prompt the user to login and authorize the application.  For Twitter, a
+ * Call `authorize` to prompt the user to login and authorize the application.  For XING a
  * dialog box will appear asking the user for their permission and login credentials.
  *
  * Before calling `authorize`, the application will need a consumer key and secret provided by the
  * social media service provider for the OAuth protocol, used when calling `create`.
- * For Twitter, these are provided when registering an application:
- * [https://dev.twitter.com/apps/new](https://dev.twitter.com/apps/new)
  *
- * ## Example
  *
- * This example authorizes the application, posts a message to the user's Twitter account, then
- * deauthorizes the application.
- *
- *		// If not authorized, get authorization from the user
- *		if(!social.isAuthorized()) {
- *			social.authorize();
- *		}
- *
- *		// Post a message
- *		// Setup both callbacks for confirmation
- *		social.share({
- *			message: "Salut, Monde!",
- *			success: function(e) {alert('Success!')},
- *			error: function(e) {alert('Error!')}
- *		});
- *
- *		// Deauthorize the application
- *		social.deauthorize();
+
  */
 
 function hex_sha1(s) {
@@ -458,14 +438,17 @@ var OAuthAdapter = function(pConsumerSecret, pConsumerKey, pSignatureMethod) {
 			method : "POST",
 			parameters : []
 		};
-		return message.parameters.push(["oauth_consumer_key", consumerKey]), message.parameters.push(["oauth_signature_method", signatureMethod]), message;
+		return message.parameters.push(["oauth_callback", "oob"]),
+			message.parameters.push(["oauth_consumer_key", consumerKey]),  
+		       message.parameters.push(["oauth_signature_method", signatureMethod]), message;
 	};
 	this.getPin = function() {
 		return pin;
 	}, this.getRequestToken = function(pUrl, callback) {
 		accessor.tokenSecret = "";
 		var message = createMessage(pUrl);
-		OAuth.setTimestampAndNonce(message), OAuth.SignatureMethod.sign(message, accessor);
+		console.log(pUrl);
+	console.log(message);	OAuth.setTimestampAndNonce(message), OAuth.SignatureMethod.sign(message, accessor);
 		var done = !1, client = Ti.Network.createHTTPClient({
 			onload : function() {
 				var responseParams = OAuth.getParameterMap(this.responseText);
@@ -480,7 +463,7 @@ var OAuthAdapter = function(pConsumerSecret, pConsumerKey, pSignatureMethod) {
 				}), done = !0;
 			}
 		});
-		client.open("POST", pUrl), client.send(OAuth.getParameterMap(message.parameters));
+		client.open("POST", pUrl), client.setRequestHeader('User-Agent','Mozilla/5.0 (iPhone; CPU iPhone OS 5_0 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Version/5.1 Mobile/9A334 Safari/7534.48.3'), client.send(OAuth.getParameterMap(message.parameters));
 	};
 	var destroyAuthorizeUI = function() {
 		if (window == null)
@@ -496,15 +479,15 @@ var OAuthAdapter = function(pConsumerSecret, pConsumerKey, pSignatureMethod) {
 			backgroundColor : "transparent",
 			zIndex : 1e3
 		}), Ti.Android || (window.opacity = 0, window.transform = Ti.UI.create2DMatrix().scale(0)), view = Ti.UI.createView({
-			top : 10,
-			right : 10,
-			bottom : 10,
-			left : 10,
-			backgroundColor : "#52D3FE",
-			border : 10,
-			borderColor : "#52D3FE",
+			top : 5,
+			right : 5,
+			bottom : 5,
+			left : 5,
+			backgroundColor : "#1A7576",
+			border : 1,
+			borderColor : "#1A7576",
 			borderRadius : 10,
-			borderWidth : 4,
+			borderWidth : 5,
 			zIndex : -1
 		});
 		var closeLabel = Ti.UI.createButton({
@@ -512,8 +495,8 @@ var OAuthAdapter = function(pConsumerSecret, pConsumerKey, pSignatureMethod) {
 				fontSize : 11,
 				fontWeight : "bold"
 			},
-			backgroundColor : "#52D3FE",
-			borderColor : "#52D3FE",
+			backgroundColor : "#1A7576",
+			borderColor : "#1A7576",
 			color : "#fff",
 			style : 0,
 			borderRadius : 6,
@@ -563,14 +546,14 @@ var OAuthAdapter = function(pConsumerSecret, pConsumerKey, pSignatureMethod) {
 		showLoading();
 	}, this.showAuthorizeUI = function(pUrl, pReceivePinCallback) {
 		receivePinCallback = pReceivePinCallback;
-		var offset = 10;
+		var offset = 10;console.log(pUrl);
 		Ti.Android && ( offset = "10dp"), webView = Ti.UI.createWebView({
 			url : pUrl,
 			top : offset,
 			right : offset,
 			bottom : offset,
 			left : offset,
-			autoDetect : [Ti.UI.AUTODETECT_NONE]
+			autoDetect : [Ti.UI.AUTOLINK_NONE]
 		}), webView.addEventListener("beforeload", showLoading), webView.addEventListener("load", authorizeUICallback), view.add(webView);
 	}, this.getAccessToken = function(pUrl, callback) {
 		accessor.tokenSecret = requestTokenSecret;
@@ -617,16 +600,10 @@ var OAuthAdapter = function(pConsumerSecret, pConsumerKey, pSignatureMethod) {
 		client.open("POST", pUrl), client.send(parameterMap);
 	};
 }, supportedSites = {
-	twitter : {
-		accessToken : "https://api.twitter.com/oauth/access_token",
-		requestToken : "https://api.twitter.com/oauth/request_token",
-		authorize : "https://api.twitter.com/oauth/authorize?",
-		update : "https://api.twitter.com/1.1/statuses/update.json"
-	},
 	xing : {
 		accessToken : "https://api.xing.com/v1/access_token",
-		requestToken : "https://api.xing.com//v1/request_token",
-		authorize : "https://api.xing.com/oauth/authorize"
+		requestToken : "https://api.xing.com/v1/request_token",
+		authorize : "https://api.xing.com/v1/authorize?"
 	}
 };
 
@@ -642,22 +619,14 @@ var OAuthAdapter = function(pConsumerSecret, pConsumerKey, pSignatureMethod) {
  */
 
 exports.create = function(settings) {
-	var site = (settings.site || "twitter").toLowerCase(), adapter = new OAuthAdapter(settings.consumerSecret, settings.consumerKey, "HMAC-SHA1");
-	adapter.loadAccessToken(site);
+	var site = 'xing';
 	var urls = supportedSites[site];
-	return urls == null ? (alert("The Social.js module does not support " + site + " yet!"), null) : {
-		/**
-		 * @method isAuthorized
-		 * Returns 'true' if the client is authorized by the service provider.
-		 * @return {Boolean} Returns 'true' if authorized else 'false'.
-		 */
+	var adapter = new OAuthAdapter(settings.consumerSecret, settings.consumerKey, "HMAC-SHA1");
+	adapter.loadAccessToken(site);
+	return {
 		isAuthorized : function() {
 			return adapter.isAuthorized();
 		},
-		/**
-		 * @method deauthorize
-		 * Deauthorizes the client and clears the access token.
-		 */
 		deauthorize : function() {
 			adapter.clearAccessToken(site);
 		},
@@ -678,11 +647,11 @@ exports.create = function(settings) {
 						evt.success ? (adapter.saveAccessToken(site), callback && callback({
 							username : evt.username,
 							userid : evt.userid
-						})) : alert("Twitter did not give us an access token!");
+						})) : alert("XING did not give us an access token!");
 					});
 				}
 				adapter.showLoadingUI(), adapter.getRequestToken(urls.requestToken, function(evt) {
-					evt.success ? adapter.showAuthorizeUI(urls.authorize + evt.token, receivePin) : alert(settings.site +" did not give us a request token!");
+					evt.success ? adapter.showAuthorizeUI(urls.authorize + evt.token, receivePin) : alert("XING did not give us a request token!");
 				});
 			} else
 				callback && callback();
