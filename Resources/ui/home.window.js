@@ -63,7 +63,7 @@ exports.create = function() {
 	});
 	if (Ti.App.XING.isAuthorized()) {
 		self.listview.bottom = 0;
-		Ti.App.XING.me({
+		Ti.App.XING.getUser({
 			onsuccess : function(_e) {
 				console.log(_e);
 

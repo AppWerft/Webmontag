@@ -1,6 +1,6 @@
 var onclick = function(_e) {
 	console.log(_e);
-}
+};
 
 exports.events = {
 	properties : {
@@ -17,11 +17,14 @@ exports.events = {
 			left : 0
 		},
 		events : {
-			'click' : onclick
+			click : onclick
 		}
 	}, {
 		type : 'Ti.UI.Label',
 		bindId : 'title',
+		events : {
+			click : onclick
+		},
 		properties : {
 			color : '#666',
 			height : Ti.UI.SIZE,
@@ -38,7 +41,7 @@ exports.events = {
 		type : 'Ti.UI.Label',
 		bindId : 'subtitle',
 		events : {
-			'click' : onclick
+			click : onclick
 		},
 		properties : {
 			color : '#666',
@@ -64,6 +67,12 @@ exports.session = {
 	childTemplates : [{
 		type : 'Ti.UI.ImageView',
 		bindId : 'logo',
+		events : {
+			click : onclick
+		},
+		events : {
+			click : onclick
+		},
 		properties : {
 			height : Ti.UI.SIZE,
 			width : '90dp',
@@ -73,6 +82,9 @@ exports.session = {
 	}, {
 		type : 'Ti.UI.Label',
 		bindId : 'title',
+		events : {
+			click : onclick
+		},
 		properties : {
 			color : '#666',
 			height : '60dp',
@@ -90,6 +102,9 @@ exports.session = {
 	}, {
 		type : 'Ti.UI.Label',
 		bindId : 'subtitle',
+		events : {
+			click : onclick
+		},
 		properties : {
 			color : '#666',
 			right : '20dp',

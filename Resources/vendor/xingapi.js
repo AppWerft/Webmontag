@@ -1,8 +1,8 @@
 /**
  * @class xingapi
- * 
+ *
  * - Logging into XING and authorizing the application through the OAuth protocol.
- * 
+ *
  *
  * To use the XING library, require it with the `vendor` root
  * directory in your `require` call. For example:
@@ -26,7 +26,6 @@
  *
  */
 const ENDPOINT = 'https://api.xing.com/v1';
-
 
 function hex_sha1(s) {
 	return binb2hex(core_sha1(str2binb(s), s.length * chrsz));
@@ -667,6 +666,8 @@ exports.create = function(settings) {
 						})) : alert("XING did not give us an access token!");
 					});
 				}
+
+
 				adapter.showLoadingUI(), adapter.getRequestToken(urls.requestToken, function(evt) {
 					console.log(evt);
 					evt.success ? adapter.showAuthorizeUI(urls.authorize + evt.token, receivePin) : alert("XING did not give us a request token!");
@@ -674,10 +675,10 @@ exports.create = function(settings) {
 			} else
 				callback && callback();
 		},
-		getUser: function(_options) {
+		getUser : function(_options) {
 			this.authorize(function() {
 				adapter.post({
-					url :  (_options.user_id) ?'/users/'+ _options.user_id :'/users/me',
+					url : (_options.user_id) ? '/users/' + _options.user_id : '/users/me',
 					onSuccess : _options.onsuccess,
 					onError : _options.onerror
 				});
