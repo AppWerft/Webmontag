@@ -1,15 +1,13 @@
 /**
- * @class Alloy.builtins.social
- * A collection of useful social media provider utilities. Currently, this module only supports
- * XING and the following features:
- *
+ * @class xingapi
+ * 
  * - Logging into XING and authorizing the application through the OAuth protocol.
- * - Posting tweets to the user's XING account.
+ * 
  *
- * To use the social builtin library, require it with the `alloy` root
+ * To use the XING library, require it with the `vendor` root
  * directory in your `require` call. For example:
  *
- *     var social = require('alloy/social').create({
+ *     var XING = require('vendor/xingapi').create({
  *         consumerSecret: 'consumer-secret',
  *         consumerKey: 'consumer-key'
  *     });
@@ -27,6 +25,8 @@
  *
  *
  */
+const ENDPOINT = 'https://api.xing.com/v1';
+
 
 function hex_sha1(s) {
 	return binb2hex(core_sha1(str2binb(s), s.length * chrsz));
@@ -399,8 +399,7 @@ var OAuthAdapter = function(pConsumerSecret, pConsumerKey, pSignatureMethod) {
 	function authorizeUICallback(e) {
 		var response = e.source.evalJS('(p = document.getElementById("verifier")) && p.innerHTML;');
 		console.log(response);
-		response ? ( pin = response, destroyAuthorizeUI(), receivePinCallback()) 
-		: (loadingView && loadingView.hide(), loadingContainer && loadingContainer.hide(), webView && webView.show()), loading = !1, clearInterval(intervalID), estimates[estimateID] = (new Date).getTime() - startTime, Ti.App.Properties.setString("Social-LoadingEstimates", JSON.stringify(estimates));
+		response ? ( pin = response, destroyAuthorizeUI(), receivePinCallback()) : (loadingView && loadingView.hide(), loadingContainer && loadingContainer.hide(), webView && webView.show()), loading = !1, clearInterval(intervalID), estimates[estimateID] = (new Date).getTime() - startTime, Ti.App.Properties.setString("Social-LoadingEstimates", JSON.stringify(estimates));
 	}
 
 	var consumerSecret = pConsumerSecret, consumerKey = pConsumerKey, signatureMethod = pSignatureMethod, pin = null, requestToken = null, requestTokenSecret = null, accessToken = null, accessTokenSecret = null, accessor = {
@@ -439,17 +438,14 @@ var OAuthAdapter = function(pConsumerSecret, pConsumerKey, pSignatureMethod) {
 			method : "POST",
 			parameters : []
 		};
-		return message.parameters.push(["oauth_callback", "oob"]),
-			message.parameters.push(["oauth_consumer_key", consumerKey]),  
-		       message.parameters.push(["oauth_signature_method", signatureMethod]), message;
+		return message.parameters.push(["oauth_callback", "oob"]), message.parameters.push(["oauth_consumer_key", consumerKey]), message.parameters.push(["oauth_signature_method", signatureMethod]), message;
 	};
 	this.getPin = function() {
 		return pin;
 	}, this.getRequestToken = function(pUrl, callback) {
 		accessor.tokenSecret = "";
 		var message = createMessage(pUrl);
-		console.log(pUrl);
-	console.log(message);	OAuth.setTimestampAndNonce(message), OAuth.SignatureMethod.sign(message, accessor);
+		OAuth.setTimestampAndNonce(message), OAuth.SignatureMethod.sign(message, accessor);
 		var done = !1, client = Ti.Network.createHTTPClient({
 			onload : function() {
 				var responseParams = OAuth.getParameterMap(this.responseText);
@@ -464,7 +460,7 @@ var OAuthAdapter = function(pConsumerSecret, pConsumerKey, pSignatureMethod) {
 				}), done = !0;
 			}
 		});
-		client.open("POST", pUrl), client.setRequestHeader('User-Agent','Mozilla/5.0 (iPhone; CPU iPhone OS 5_0 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Version/5.1 Mobile/9A334 Safari/7534.48.3'), client.send(OAuth.getParameterMap(message.parameters));
+		client.open("POST", pUrl), client.setRequestHeader('User-Agent', 'Mozilla/5.0 (iPhone; CPU iPhone OS 5_0 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Version/5.1 Mobile/9A334 Safari/7534.48.3'), client.send(OAuth.getParameterMap(message.parameters));
 	};
 	var destroyAuthorizeUI = function() {
 		if (window == null)
@@ -501,11 +497,11 @@ var OAuthAdapter = function(pConsumerSecret, pConsumerKey, pSignatureMethod) {
 			color : "#fff",
 			style : 0,
 			borderRadius : 6,
-			title : "X",
-			top : 8,
-			right : 8,
-			width : 30,
-			height : 30
+			title : "⨉",
+			top : '8dp',
+			right : '8dp',
+			width : '30dp',
+			height : '30dp'
 		});
 		closeLabel.addEventListener("click", destroyAuthorizeUI), window.open();
 		var offset = 0;
@@ -547,7 +543,8 @@ var OAuthAdapter = function(pConsumerSecret, pConsumerKey, pSignatureMethod) {
 		showLoading();
 	}, this.showAuthorizeUI = function(pUrl, pReceivePinCallback) {
 		receivePinCallback = pReceivePinCallback;
-		var offset = 10;console.log(pUrl);
+		var offset = 10;
+		console.log(pUrl);
 		Ti.Android && ( offset = "10dp"), webView = Ti.UI.createWebView({
 			url : pUrl,
 			top : offset,
@@ -579,6 +576,7 @@ var OAuthAdapter = function(pConsumerSecret, pConsumerKey, pSignatureMethod) {
 		});
 		client.open("POST", pUrl), client.send(parameterMap);
 	}, this.send = function(options, callback) {
+		var method = (options.method) ? options.method : 'POST';
 		var pUrl = options.url, pParameters = options.parameters, pTitle = options.title, pSuccessMessage = options.onSuccess, pErrorMessage = options.onError;
 		if (accessToken == null || accessTokenSecret == null) {
 			Ti.API.debug("The send status cannot be processed as the client doesn't have an access token. Authorize before trying to send.");
@@ -595,16 +593,36 @@ var OAuthAdapter = function(pConsumerSecret, pConsumerKey, pSignatureMethod) {
 				client.status == 200 ? pSuccessMessage && pSuccessMessage(this.responseText) : pErrorMessage && pErrorMessage(this.responseText);
 			},
 			onerror : function() {
-				Ti.API.error("Social.js: FAILED to send a request!"), pErrorMessage && pErrorMessage(this.responseText);
+				Ti.API.error("xingapi.js: FAILED to send a request to " + pUrl), pErrorMessage && pErrorMessage(this.responseText);
 			}
 		});
-		client.open("POST", pUrl), client.send(parameterMap);
+		client.open(method, pUrl);
+		client.setRequestHeader('User-Agent', 'Mozilla/5.0 (iPhone; CPU iPhone OS 5_0 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Version/5.1 Mobile/9A334 Safari/7534.48.3');
+		if (options.json == true) {
+			client.setRequestHeader('Accept-Header', 'application/json');
+			client.setRequestHeader('Content-Type', 'application/json');
+		}
+		client.send(parameterMap);
 	};
+	var self = this;
+	this.get = function(options, callback) {
+		options.method = 'GET';
+		options.url = ENDPOINT + options.url;
+		options.json = true;
+		self.send(options, callback);
+	};
+	this.post = function(options, callback) {
+		options.method = 'POST';
+		options.url = ENDPOINT + options.url;
+		options.json = true;
+		self.send(options, callback);
+	};
+
 }, supportedSites = {
 	xing : {
-		accessToken : "https://api.xing.com/v1/access_token",
-		requestToken : "https://api.xing.com/v1/request_token",
-		authorize : "https://api.xing.com/v1/authorize?"
+		accessToken : ENDPOINT + "/access_token",
+		requestToken : ENDPOINT + "/request_token",
+		authorize : ENDPOINT + "/authorize?"
 	}
 };
 
@@ -646,16 +664,24 @@ exports.create = function(settings) {
 				function receivePin() {
 					adapter.getAccessToken(urls.accessToken, function(evt) {
 						evt.success ? (adapter.saveAccessToken(site), callback && callback({
-							username : evt.username,
-							userid : evt.userid
 						})) : alert("XING did not give us an access token!");
 					});
 				}
 				adapter.showLoadingUI(), adapter.getRequestToken(urls.requestToken, function(evt) {
+					console.log(evt);
 					evt.success ? adapter.showAuthorizeUI(urls.authorize + evt.token, receivePin) : alert("XING did not give us a request token!");
 				});
 			} else
 				callback && callback();
+		},
+		getUser: function(userid) {
+			this.authorize(function() {
+				adapter.post({
+					url :  (user) ?'/users/+ userid :'/users/me',
+					onSuccess : options.onsuccess,
+					onError : options.onerror
+				});
+			});
 		}
 	};
 };

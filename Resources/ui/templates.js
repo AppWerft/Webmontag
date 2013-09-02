@@ -1,3 +1,7 @@
+var onclick = function(_e) {
+	console.log(_e);
+}
+
 exports.events = {
 	properties : {
 		height : '100dp',
@@ -11,6 +15,9 @@ exports.events = {
 			bubbles : true,
 			width : '90dp',
 			left : 0
+		},
+		events : {
+			'click' : onclick
 		}
 	}, {
 		type : 'Ti.UI.Label',
@@ -30,6 +37,9 @@ exports.events = {
 	}, {
 		type : 'Ti.UI.Label',
 		bindId : 'subtitle',
+		events : {
+			'click' : onclick
+		},
 		properties : {
 			color : '#666',
 			height : Ti.UI.SIZE,

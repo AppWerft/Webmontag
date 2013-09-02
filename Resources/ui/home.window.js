@@ -1,6 +1,5 @@
 exports.create = function() {
 	var w = Ti.Platform.displayCaps.platformWidth;
-	console.log('Info: starting window with ' + w + 'pix');
 	var self = Ti.UI.createWindow({
 		title : "WebMontag in Hamburg",
 		fullscreen : true,
@@ -14,6 +13,12 @@ exports.create = function() {
 		backgroundImage : '/assets/logo.png',
 		height : w / 6.5
 	});
+	var xinglogin = Ti.UI.createImageView({
+		image : '/assets/signin.png',
+		width : w / 2,
+		height : w / 11,
+		bottom : 0
+	});
 	var memberstotal = Ti.UI.createLabel({
 		left : '10dp',
 		bottom : '10dp',
@@ -25,14 +30,14 @@ exports.create = function() {
 	});
 	logo.add(memberstotal);
 	self.open();
-	var template = require('ui/templates').events;
 	self.listview = Ti.UI.createListView({
 		top : w / 6.4,
+		bottom : w / 10,
 		templates : {
-			'events' : template
+			'events' : require('ui/templates').events
 		},
 		defaultItemTemplate : 'events'
-	});
+	});self.add(xinglogin);
 	self.add(self.listview);
 	self.listview.addEventListener('itemclick', function(_e) {
 		console.log('Info: itemclick received.');
@@ -50,11 +55,25 @@ exports.create = function() {
 			title : 'Online'
 		}).show();
 	}
-	logo.addEventListener('click', function() {
-		if (!Ti.App.Xing.isAuthorized()) {
-			Ti.App.Xing.authorize();
-		}
+	xinglogin.addEventListener('click', function() {
+		Ti.App.XING.authorize(function(_e) {
+			console.log(_e);
+			self.listview.bottom = 0;
+		});
 	});
+	if (Ti.App.XING.isAuthorized()) {
+		self.listview.bottom = 0;
+		Ti.App.XING.me({
+			onsuccess : function(_e) {
+				console.log(_e);
+
+			},
+			onerror : function(_e) {
+				console.log(_e);
+			},
+		});
+	}
+	
 	Ti.App.Model.getMembersTotal(function(_total) {
 		memberstotal.setText(_total + ' Mitglieder');
 	});
