@@ -674,12 +674,12 @@ exports.create = function(settings) {
 			} else
 				callback && callback();
 		},
-		getUser: function(userid) {
+		getUser: function(_options) {
 			this.authorize(function() {
 				adapter.post({
-					url :  (user) ?'/users/+ userid :'/users/me',
-					onSuccess : options.onsuccess,
-					onError : options.onerror
+					url :  (_options.user_id) ?'/users/'+ _options.user_id :'/users/me',
+					onSuccess : _options.onsuccess,
+					onError : _options.onerror
 				});
 			});
 		}
