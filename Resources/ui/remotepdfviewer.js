@@ -21,7 +21,7 @@ exports.createPDFViewer = function(_pdf) {
 			xhr.send(null);
 		}
 	};
-	getFromCache(_pdf, function(_appfile) {
+	getFromCache(_pdf, function(_appFile) {
 		if (Ti.Filesystem.isExternalStoragePresent()) {
 			var filenameBase = new Date().getTime();
 			tmpFile = Ti.Filesystem.getFile(Ti.Filesystem.tempDirectory, filenameBase + '.pdf');
