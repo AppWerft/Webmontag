@@ -16,10 +16,10 @@ exports.create = function(_event, _W, _H) {
 		for (var i = 0; i < _event.gallery.length; i++) {
 			var mini = require('ui/progressimage').create({
 				image : 'http://www.webmontag-hamburg.de/tl_files/galerie/' + _event.gallery[i],
-				defaultImage : '/assets/logobg.png',
 				width : _W,
 				left : 0,
 				top : 0,
+				progress : true,
 				height : _H
 			});
 			self.add(mini);

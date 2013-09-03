@@ -25,7 +25,7 @@ exports.events = {
 			}
 		},
 		properties : {
-			color : '#666',
+			color : '#333',
 			height : Ti.UI.SIZE,
 			font : {
 				fontSize : pt,

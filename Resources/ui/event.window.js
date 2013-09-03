@@ -45,7 +45,41 @@ exports.create = function(_event) {
 		self.listview.setSections(sections);
 	}
 	self.listview.addEventListener('itemclick', function(_e) {
-		require('ui/video.widget').create(JSON.parse(_e.itemId));
+		var event = JSON.parse(_e.itemId);
+		var options = [], actions = [];
+		if (event.mp4) {
+			options.push('VideoPodcast');
+			actions.push('video');
+		}
+		if (event.hp && event.speaker) {
+			options.push(event.speaker + '@XING');
+			actions.push('web');
+		}
+		if (event.slides) {
+			options.push('Slides');
+			actions.push('slides');
+		}
+		var dialog = Ti.UI.createOptionDialog({
+			options : options,
+			title : 'Auswahl'
+		});
+		if (options.length)
+			dialog.show();
+		dialog.addEventListener('click', function(_d) {
+			switch (actions[_d.index]) {
+				case 'video':
+					require('ui/video.widget').create(event);
+					break;
+				case 'web':
+					require('ui/speakerhomepage.window').create(event);
+					break;
+				case 'slides':
+					console.log(event.slides);
+					//		Titanium.Platform.openURL(event.slides);
+					require('ui/remotepdfviewer').createPDFViewer(event.slides);
+					break;
+			}
+		});
 	});
 	setTimeout(function() {
 		if (_event.gallery && _event.gallery.length) {
@@ -65,7 +99,8 @@ exports.create = function(_event) {
 		photograph = Ti.UI.createLabel({
 			text : '\nPhotograph:\n' + _event.photograph,
 			top : H - 1,
-			color : 'white',height:H,
+			color : 'white',
+			height : H,
 			shadowOffset : {
 				x : '2dp',
 				y : '2dp'
@@ -81,8 +116,9 @@ exports.create = function(_event) {
 			left : '20dp'
 		});
 		self.add(photograph);
-	}self.addEventListener('longpress', function() {
-			self.close();
-		});
+	}
+	self.addEventListener('longpress', function() {
+		self.close();
+	});
 	return self;
 };

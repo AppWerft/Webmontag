@@ -7,20 +7,30 @@ WebMon.prototype.getAll = function(_args) {
 	if (file) {
 		try {
 			var events = JSON.parse(file.read().text);
-			_args.onload(events);
+			//_args.onload(events);
 		} catch(E) {
 			console.log('Warning: invalide events');
+			file.deleteFile(); 
 		}
-	}
-	var url = 'http://www.webmontag-hamburg.de/events.json';
+	}	
+	var url = 'http://lab.min.uni-hamburg.de/store/webmontag/events.json';
+	console.log('Info: starting HTTPClient to get ' + url);
 	var xhr = Ti.Network.createHTTPClient({
 		onload : function() {
+			console.log(this.status);
+			console.log(this.responseText);
+			
 			try {
 				var events = JSON.parse(this.responseText);
+				console.log(events);
 				file.write(this.responseText);
 				_args.onload(events);
 			} catch(E) {
+				console.log('Error: JSON kaputt	' + url +E);
 			}
+		},
+		onerror : function() {
+			console.log(this.error);
 		}
 	});
 	xhr.open('GET', url);
