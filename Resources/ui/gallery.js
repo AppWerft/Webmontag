@@ -14,7 +14,7 @@ exports.create = function(_event, _W, _H) {
 	});
 	if (_event.gallery && _event.gallery.length) {
 		for (var i = 0; i < _event.gallery.length; i++) {
-			var mini = Ti.UI.createImageView({
+			var mini = require('ui/progressimage').create({
 				image : 'http://www.webmontag-hamburg.de/tl_files/galerie/' + _event.gallery[i],
 				defaultImage : '/assets/logobg.png',
 				width : _W,

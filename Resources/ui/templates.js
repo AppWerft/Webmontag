@@ -1,7 +1,4 @@
-var onclick = function(_e) {
-	console.log(_e);
-};
-
+var pt = Titanium.Platform.displayCaps.platformWidth*0.068;
 exports.events = {
 	properties : {
 		height : '100dp',
@@ -17,31 +14,34 @@ exports.events = {
 			left : 0
 		},
 		events : {
-			click : onclick
+			click : function() {
+			}
 		}
 	}, {
 		type : 'Ti.UI.Label',
 		bindId : 'title',
 		events : {
-			click : onclick
+			click : function() {
+			}
 		},
 		properties : {
 			color : '#666',
 			height : Ti.UI.SIZE,
 			font : {
-				fontSize : (Ti.Android) ? '23dp' : 19,
+				fontSize : pt,
 				fontFamily : 'KenyanCoffeeRg-Regular'
 			},
-			left : "100dp",
+			left : '95dp',
 			width : Ti.UI.FILL,
 			top : '5dp',
-			right : '15dp'
+			right : '20dp'
 		},
 	}, {
 		type : 'Ti.UI.Label',
 		bindId : 'subtitle',
 		events : {
-			click : onclick
+			click : function() {
+			}
 		},
 		properties : {
 			color : '#666',
@@ -53,7 +53,7 @@ exports.events = {
 			},
 			width : Ti.UI.FILL,
 			bottom : '5dip',
-			left : "100dp"
+			left : "95dp"
 		},
 	}]
 
@@ -68,10 +68,8 @@ exports.session = {
 		type : 'Ti.UI.ImageView',
 		bindId : 'logo',
 		events : {
-			click : onclick
-		},
-		events : {
-			click : onclick
+			click : function() {
+			}
 		},
 		properties : {
 			height : Ti.UI.SIZE,
@@ -83,7 +81,8 @@ exports.session = {
 		type : 'Ti.UI.Label',
 		bindId : 'title',
 		events : {
-			click : onclick
+			click : function() {
+			}
 		},
 		properties : {
 			color : '#666',
@@ -103,7 +102,8 @@ exports.session = {
 		type : 'Ti.UI.Label',
 		bindId : 'subtitle',
 		events : {
-			click : onclick
+			click : function() {
+			}
 		},
 		properties : {
 			color : '#666',
