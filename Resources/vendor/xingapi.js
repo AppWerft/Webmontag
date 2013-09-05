@@ -239,7 +239,8 @@ OAuth == null && ( OAuth = {}), OAuth.setProperties = function(into, from) {
 		return newURL;
 	},
 	getAuthorizationHeader : function(realm, parameters) {
-		var header = 'OAuth realm="' + OAuth.percentEncode(realm) + '"', list = OAuth.getParameterList(parameters);
+		var header = 'OAuth realm="' + OAuth.percentEncode(realm);
+		var list = OAuth.getParameterList(parameters);
 		for (var p = 0; p < list.length; ++p) {
 			var parameter = list[p], name = parameter[0];
 			name.indexOf("oauth_") == 0 && (header += "," + OAuth.percentEncode(name) + '="' + OAuth.percentEncode(parameter[1]) + '"');
@@ -589,29 +590,29 @@ var OAuthAdapter = function(pConsumerSecret, pConsumerKey, pSignatureMethod) {
 		for (p in pParameters)
 		message.parameters.push(pParameters[p]);
 		OAuth.setTimestampAndNonce(message), OAuth.SignatureMethod.sign(message, accessor);
-		var parameterMap = OAuth.getParameterMap(message.parameters), client = Ti.Network.createHTTPClient({
+		var parameterMap = OAuth.getParameterMap(message.parameters);
+		var client = Ti.Network.createHTTPClient({
 			onload : function() {
+				console.log('Load: ' + this.status);
+				console.log('Load: ' + this.responseText);
 				client.status == 200 ? pSuccessMessage && pSuccessMessage(this.responseText) : pErrorMessage && pErrorMessage(this.responseText);
 			},
 			onerror : function() {
-				console.log(this.status);
+				console.log('Error: ' + this.status);
+				console.log('Error: ' + this.responseText);
 				Ti.API.error("xingapi.js: FAILED to send a request to " + pUrl), pErrorMessage && pErrorMessage(this.responseText);
-				console.log(parameterMap);
 			}
 		});
 		client.open(method, pUrl);
 		client.setRequestHeader('User-Agent', 'Mozilla/5.0 (iPhone; CPU iPhone OS 5_0 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Version/5.1 Mobile/9A334 Safari/7534.48.3	');
 		if (options.json == true) {
 			client.setRequestHeader('Accept-Header', 'application/json');
-			client.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+			client.setRequestHeader('Content-Type', 'application/json');
 		}
-
 		var header = OAuth.getAuthorizationHeader("", message.parameters);
-		console.log('Authorization: ' + header);
 		console.log(method + ': ' + pUrl);
-
+		console.log('Authorization: ' + header);
 		client.setRequestHeader("Authorization", header);
-
 		if (method == 'POST' || method == 'PUT')
 			client.send(parameterMap);
 	};

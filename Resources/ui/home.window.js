@@ -56,7 +56,6 @@ exports.create = function() {
 	}
 	xinglogin.addEventListener('click', function() {
 		Ti.App.XING.authorize(function(_e) {
-			console.log(_e);
 			self.listview.bottom = 0;
 		});
 	});

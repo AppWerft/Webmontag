@@ -74,7 +74,6 @@ exports.create = function(_event) {
 					require('ui/speakerhomepage.window').create(event);
 					break;
 				case 'slides':
-					console.log(event.slides);
 					var progresswidget = require('ui/progress.widget').create();
 					self.add(progresswidget);
 					//progress.open();

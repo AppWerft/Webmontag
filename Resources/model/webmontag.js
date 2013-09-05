@@ -30,7 +30,6 @@ WebMon.prototype.getAll = function(_args) {
 			actInd.hide();
 			try {
 				var events = JSON.parse(this.responseText);
-				console.log(events);
 				file.write(this.responseText);
 				_args.onload(events);
 			} catch(E) {
