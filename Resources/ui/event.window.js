@@ -34,8 +34,8 @@ exports.create = function(_event) {
 				},
 				properties : {
 					//allowsSelection : true,
-					accessoryType : (session.mp4) ? Ti.UI.LIST_ACCESSORY_TYPE_DETAIL : Ti.UI.LIST_ACCESSORY_TYPE_NONE,
-					itemId : (session.mp4) ? JSON.stringify(session) : {}
+					accessoryType : (session.mp4 || session.slides || session.hp) ? Ti.UI.LIST_ACCESSORY_TYPE_DETAIL : Ti.UI.LIST_ACCESSORY_TYPE_NONE,
+					itemId : (session.mp4 || session.slides || session.hp) ? JSON.stringify(session) : {}
 				}
 			});
 		}
@@ -75,8 +75,10 @@ exports.create = function(_event) {
 					break;
 				case 'slides':
 					console.log(event.slides);
-					//		Titanium.Platform.openURL(event.slides);
-					require('ui/remotepdfviewer').createPDFViewer(event.slides);
+					var progresswidget = require('ui/progress.widget').create();
+					self.add(progresswidget);
+					//progress.open();
+					require('ui/remotepdfviewer').createPDFViewer(event, progresswidget);
 					break;
 			}
 		});

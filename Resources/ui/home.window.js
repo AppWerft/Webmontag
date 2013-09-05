@@ -37,12 +37,11 @@ exports.create = function() {
 			'events' : require('ui/templates').events
 		},
 		defaultItemTemplate : 'events'
-	});self.add(xinglogin);
+	});
+	self.add(xinglogin);
 	self.add(self.listview);
 	self.listview.addEventListener('itemclick', function(_e) {
 		console.log('Info: itemclick received.');
-		Ti.Media.vibrate();
-		console.log(_e.itemId.length);
 		var event = JSON.parse(_e.itemId);
 		require('ui/event.window').create(event).open();
 	});
@@ -73,7 +72,7 @@ exports.create = function() {
 			},
 		});
 	}
-	
+
 	Ti.App.Model.getMembersTotal(function(_total) {
 		memberstotal.setText(_total + ' Mitglieder');
 	});

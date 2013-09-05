@@ -23,7 +23,7 @@
  * Before calling `authorize`, the application will need a consumer key and secret provided by the
  * social media service provider for the OAuth protocol, used when calling `create`.
  *
- *
+ * LinkedIn https://gist.github.com/vyatri/6094282
  */
 const ENDPOINT = 'https://api.xing.com/v1';
 
@@ -525,8 +525,10 @@ var OAuthAdapter = function(pConsumerSecret, pConsumerKey, pSignatureMethod) {
 				fontWeight : "bold"
 			},
 			style : 0
-		}), view.add(loadingContainer), loadingContainer.add(loadingView), loadingView.show(), window.add(view), window.add(closeLabel);
+		}), view.add(loadingContainer), loadingContainer.add(loadingView), loadingView.show(), window.add(view);
+
 		if (!Ti.Android) {
+			window.add(closeLabel);
 			var tooBig = Ti.UI.createAnimation({
 				transform : Ti.UI.create2DMatrix().scale(1.1),
 				opacity : 1,
@@ -592,16 +594,26 @@ var OAuthAdapter = function(pConsumerSecret, pConsumerKey, pSignatureMethod) {
 				client.status == 200 ? pSuccessMessage && pSuccessMessage(this.responseText) : pErrorMessage && pErrorMessage(this.responseText);
 			},
 			onerror : function() {
+				console.log(this.status);
 				Ti.API.error("xingapi.js: FAILED to send a request to " + pUrl), pErrorMessage && pErrorMessage(this.responseText);
+				console.log(parameterMap);
 			}
 		});
 		client.open(method, pUrl);
-		client.setRequestHeader('User-Agent', 'Mozilla/5.0 (iPhone; CPU iPhone OS 5_0 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Version/5.1 Mobile/9A334 Safari/7534.48.3');
+		client.setRequestHeader('User-Agent', 'Mozilla/5.0 (iPhone; CPU iPhone OS 5_0 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Version/5.1 Mobile/9A334 Safari/7534.48.3	');
 		if (options.json == true) {
 			client.setRequestHeader('Accept-Header', 'application/json');
-			client.setRequestHeader('Content-Type', 'application/json');
+			client.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 		}
-		client.send(parameterMap);
+
+		var header = OAuth.getAuthorizationHeader("", message.parameters);
+		console.log('Authorization: ' + header);
+		console.log(method + ': ' + pUrl);
+
+		client.setRequestHeader("Authorization", header);
+
+		if (method == 'POST' || method == 'PUT')
+			client.send(parameterMap);
 	};
 	var self = this;
 	this.get = function(options, callback) {
@@ -677,7 +689,7 @@ exports.create = function(settings) {
 		},
 		getUser : function(_options) {
 			this.authorize(function() {
-				adapter.post({
+				adapter.get({
 					url : (_options.user_id) ? '/users/' + _options.user_id : '/users/me',
 					onSuccess : _options.onsuccess,
 					onError : _options.onerror

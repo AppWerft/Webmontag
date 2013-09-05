@@ -3,39 +3,50 @@ var WebMon = function() {
 };
 
 WebMon.prototype.getAll = function(_args) {
-	var file = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory, 'events.json');
-	if (file) {
+	var file = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory, 'EVENTS.json');
+	if (file.exists()) {
 		try {
 			var events = JSON.parse(file.read().text);
-			//_args.onload(events);
+			_args.onload(events);
 		} catch(E) {
 			console.log('Warning: invalide events');
-			file.deleteFile(); 
+			file.deleteFile();
 		}
-	}	
+	}
 	var url = 'http://lab.min.uni-hamburg.de/store/webmontag/events.json';
 	console.log('Info: starting HTTPClient to get ' + url);
+	var actInd = Ti.UI.createActivityIndicator({
+		color : 'white',
+		backgroundColor : 'black',
+		width : '250dp',
+		height : '100dp',
+		zIndex : 999,
+		message : 'Lade Liste …'
+	});
+	_args.parentview.add(actInd);
+	actInd.show();
 	var xhr = Ti.Network.createHTTPClient({
 		onload : function() {
-			console.log(this.status);
-			console.log(this.responseText);
-			
+			actInd.hide();
 			try {
 				var events = JSON.parse(this.responseText);
 				console.log(events);
 				file.write(this.responseText);
 				_args.onload(events);
 			} catch(E) {
-				console.log('Error: JSON kaputt	' + url +E);
+				console.log('Error: JSON kaputt	' + url + E);
 			}
 		},
 		onerror : function() {
+			actInd.hide();
 			console.log(this.error);
 		}
 	});
 	xhr.open('GET', url);
 	xhr.send(null);
 };
+
+
 
 WebMon.prototype.getMembersTotal = function(_callback) {
 	var self = this;

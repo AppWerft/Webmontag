@@ -1,6 +1,7 @@
 exports.update = function(_listview) {
 	var sections = [];
 	Ti.App.Model.getAll({
+		parentview: _listview,
 		onload : function(_data) {
 			var items = [];
 			for (var i = 0; i < _data.events.length; i++) {
