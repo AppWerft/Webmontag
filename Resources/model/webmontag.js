@@ -1,5 +1,36 @@
 var WebMon = function() {
+	this.profiles = {};
 	return this;
+};
+
+WebMon.prototype.getXINGProfile = function(_profile, _callback) {
+	if (!_profile.hp) {
+		console.log('Warning: no profile');
+		return;
+	}
+	var user = _profile.hp.split(/\/profiles\//)[1];
+	console.log('Info: retrieving profile ' + user);
+	if (this.profiles[user]) {
+		console.log('Info: profile in storage');
+		_callback && _callback({
+			success : true,
+			data : this.profiles[user]
+		});
+		return;
+	}
+	var self = this;
+	Ti.App.MultiSocial.getUserXING({
+		user_id : user,
+	}, function(_res) {
+		if (_res.success === true) {
+			console.log('Info: profile stored ' + user);
+			self.profiles[user] = _res.data;
+			_callback && _callback({
+				success : true,
+				data : self.profiles[user]
+			});
+		}
+	});
 };
 
 WebMon.prototype.getAll = function(_args) {
@@ -23,13 +54,14 @@ WebMon.prototype.getAll = function(_args) {
 		zIndex : 999,
 		message : 'Lade Liste …'
 	});
-	_args.parentview.add(actInd);
+	_args.parentview && _args.parentview.add(actInd);
 	actInd.show();
 	var xhr = Ti.Network.createHTTPClient({
 		onload : function() {
 			actInd.hide();
 			try {
 				var events = JSON.parse(this.responseText);
+				console.log('Info: updating events.');
 				file.write(this.responseText);
 				_args.onload(events);
 			} catch(E) {
@@ -44,8 +76,6 @@ WebMon.prototype.getAll = function(_args) {
 	xhr.open('GET', url);
 	xhr.send(null);
 };
-
-
 
 WebMon.prototype.getMembersTotal = function(_callback) {
 	var self = this;

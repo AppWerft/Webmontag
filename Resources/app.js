@@ -5,7 +5,8 @@
 	Ti.UI.orientation = Ti.UI.PORTRAIT;
 	var Webmontag = require('model/webmontag');
 	Ti.App.Model = new Webmontag();
-	Ti.App.XING = require('vendor/xingapi').create({
+	Ti.App.MultiSocial = require('vendor/multisocial.api').create({
+		site : "xing",
 		consumerSecret : Ti.App.Properties.getString('xing.appsecret'),
 		consumerKey : Ti.App.Properties.getString('xing.appid')
 	});

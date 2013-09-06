@@ -55,13 +55,13 @@ exports.create = function() {
 		}).show();
 	}
 	xinglogin.addEventListener('click', function() {
-		Ti.App.XING.authorize(function(_e) {
+		Ti.App.MultiSocial.authorize(function(_e) {
 			self.listview.bottom = 0;
 		});
 	});
-	if (Ti.App.XING.isAuthorized()) {
+	if (Ti.App.MultiSocial.isAuthorized()) {
 		self.listview.bottom = 0;
-		Ti.App.XING.getUser({
+		Ti.App.MultiSocial.getUserXING({
 			onsuccess : function(_e) {
 				console.log(_e);
 
