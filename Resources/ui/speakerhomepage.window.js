@@ -3,7 +3,7 @@ exports.create = function(_args) {
 		orientationModes : [Ti.UI.PORTRAIT],
 		backgroundColor : '#fff'
 	});
-	if (Ti.App.MultiSocial.isAuthorized()) {
+	Ti.App.MultiSocial.authorize(function(_e) {
 		console.log(_args.hp);
 		Ti.App.Model.getXINGProfile(_args, function(_res) {
 			console.log(_res);
@@ -48,12 +48,6 @@ exports.create = function(_args) {
 				tv.appendRow(row);
 			};
 		});
-	} else {
-		var web = Ti.UI.createWebView({
-			url : _args.hp
-		});
-		self.add(web);
-
-	}
+	});
 	self.open();
 };

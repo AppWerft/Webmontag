@@ -150,7 +150,8 @@ var OAuthAdapter = function(pConsumerSecret, pConsumerKey, pSignatureMethod, pSi
 	this.showLoadingUI = function() {
 		window = Ti.UI.createWindow({
 			backgroundColor : "transparent",
-			zIndex : 1000
+			zIndex : 1000,
+			modal : true,exitOnClose: false
 		}), Ti.Android || (window.opacity = 0, window.transform = Ti.UI.create2DMatrix().scale(0)), view = Ti.UI.createView({
 			top : 10,
 			right : 10,
@@ -188,14 +189,13 @@ var OAuthAdapter = function(pConsumerSecret, pConsumerKey, pSignatureMethod, pSi
 			left : offset,
 			backgroundColor : "#fff"
 		}), loadingView = Ti.UI.createProgressBar({
-			top : 10,
 			right : 10,
 			bottom : 10,
 			left : 10,
 			min : 0,
 			max : 1,
 			value : 0.5,
-			message : "Loading, please wait.",
+			message : "Lade Webseite, das kann dauern …",
 			backgroundColor : "#fff",
 			font : {
 				fontSize : 14,
