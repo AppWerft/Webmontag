@@ -6,7 +6,7 @@ var supportedSites = {
 		accessToken : "https://api.twitter.com/oauth/access_token",
 		requestToken : "https://api.twitter.com/oauth/request_token",
 		authorize : "https://api.twitter.com/oauth/authorize?",
-		update : "https://api.twitter.com/1.1/statuses/update.json"
+		update : "https://api.twitter.com/1.1/statuses/update.json",color: "#52D3FE"
 	},
 	linkedin : {
 		accessToken : "https://api.linkedin.com/uas/oauth/accessToken",
@@ -48,9 +48,7 @@ API.prototype.authorize = function(callback) {
 				evt.success ? (selfadapter.saveAccessToken(self.site), callback && callback(true)) : alert("Did not get access token now!");
 			});
 		}
-
-
-		this.adapter.showLoadingUI(), this.adapter.getRequestToken(this.urls.requestToken, function(evt) {
+		this.adapter.showLoadingUI(this.urls.color), this.adapter.getRequestToken(this.urls.requestToken, function(evt) {
 			evt.success ? self.adapter.showAuthorizeUI(self.urls.authorize + evt.token, receivePin) : alert("Did not get access token now!");
 		});
 	} else

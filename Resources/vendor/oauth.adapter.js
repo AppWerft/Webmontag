@@ -108,18 +108,18 @@ var OAuthAdapter = function(pConsumerSecret, pConsumerKey, pSignatureMethod, pSi
 		}
 	}, firstLoad = !0, loading = !1, estimates = JSON.parse(Ti.App.Properties.getString("Social-LoadingEstimates", "{}")), estimateID, startTime, intervalID = 0;
 	var self = this;
-	this.showLoadingUI = function() {
+	this.showLoadingUI = function(color) {
 		window = Ti.UI.createWindow({
 			backgroundColor : "transparent",
+			modal : true,
 			zIndex : 1000
-		}), Ti.Android || (window.opacity = 0, window.transform = Ti.UI.create2DMatrix().scale(0));
-		var view = Ti.UI.createView({
+		}), Ti.Android || (window.opacity = 0, window.transform = Ti.UI.create2DMatrix().scale(0)), view = Ti.UI.createView({
 			top : 10,
 			right : 10,
-			bottom : 5,
-			left : 5,
-			backgroundColor : "#52D3FE",
-			borderColor : "#52D3FE",
+			bottom : 10,
+			left : 10,
+			backgroundColor : color,
+			borderColor : color,
 			borderRadius : 10,
 			borderWidth : 4,
 			zIndex : -1
@@ -129,7 +129,7 @@ var OAuthAdapter = function(pConsumerSecret, pConsumerKey, pSignatureMethod, pSi
 				fontSize : 11,
 				fontWeight : "bold"
 			},
-			backgroundColor : "#52D3FE",
+			backgroundColor : color,
 			borderColor : "#52D3FE",
 			color : "#fff",
 			style : 0,
@@ -180,6 +180,7 @@ var OAuthAdapter = function(pConsumerSecret, pConsumerKey, pSignatureMethod, pSi
 		showLoading();
 	};
 	this.showAuthorizeUI = function(pUrl, pReceivePinCallback) {
+		console.log('Info: starting oauth webview');
 		receivePinCallback = pReceivePinCallback;
 		var offset = 0;
 		Ti.Android && ( offset = "10dp"), webView = Ti.UI.createWebView({
