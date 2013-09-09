@@ -6,8 +6,7 @@
 	var Webmontag = require('model/webmontag');
 	Ti.App.Model = new Webmontag();
 	var MS = require('vendor/multisocial.api');
-		
-	Ti.App.MultiSocial = new MS({
+	Ti.App.XING = new MS({
 		site : "xing",
 		consumerSecret : Ti.App.Properties.getString('xing.appsecret'),
 		consumerKey : Ti.App.Properties.getString('xing.appid')

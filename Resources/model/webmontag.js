@@ -19,7 +19,7 @@ WebMon.prototype.getXINGProfile = function(_profile, _callback) {
 		return;
 	}
 	var self = this;
-	Ti.App.MultiSocial.getUserXING({
+	Ti.App.XING.getUserXING({
 		user_id : user,
 	}, function(_res) {
 		if (_res.success === true) {

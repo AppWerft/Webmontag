@@ -6,7 +6,8 @@ var supportedSites = {
 		accessToken : "https://api.twitter.com/oauth/access_token",
 		requestToken : "https://api.twitter.com/oauth/request_token",
 		authorize : "https://api.twitter.com/oauth/authorize?",
-		update : "https://api.twitter.com/1.1/statuses/update.json",color: "#52D3FE"
+		update : "https://api.twitter.com/1.1/statuses/update.json",
+		color: "#52D3FE"
 	},
 	linkedin : {
 		accessToken : "https://api.linkedin.com/uas/oauth/accessToken",
@@ -25,16 +26,18 @@ var supportedSites = {
 };
 
 var API = function(settings) {
+	this.adapter = new OAuthAdapter(settings.site,settings.consumerSecret, settings.consumerKey, "HMAC-SHA1");
+	this.adapter.loadAccessToken(settings.site);
+	this.urls = supportedSites[settings.site];
+	console.log(this);
 	this.site = settings.site;
-	this.adapter = new OAuthAdapter(settings.consumerSecret, settings.consumerKey, "HMAC-SHA1", settings.site);
-	this.adapter.loadAccessToken(this.site);
-	this.urls = supportedSites[this.site];
 	return this;
 };
 
 API.prototype.isAuthorized = function() {
 	return this.adapter.isAuthorized();
 };
+
 API.prototype.deauthorize = function(callback) {
 	this.adapter.clearAccessToken(this.site);
 	if (!this.adapter.isAuthorized())
@@ -45,7 +48,7 @@ API.prototype.authorize = function(callback) {
 	if (!this.adapter.isAuthorized()) {
 		function receivePin() {
 			self.adapter.getAccessToken(self.urls.accessToken, function(evt) {
-				evt.success ? (selfadapter.saveAccessToken(self.site), callback && callback(true)) : alert("Did not get access token now!");
+				evt.success ? (self.adapter.saveAccessToken(self.site), callback && callback(true)) : alert("Did not get access token now!");
 			});
 		}
 		this.adapter.showLoadingUI(this.urls.color), this.adapter.getRequestToken(this.urls.requestToken, function(evt) {

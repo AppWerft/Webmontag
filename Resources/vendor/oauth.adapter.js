@@ -1,4 +1,6 @@
-var OAuthAdapter = function(pConsumerSecret, pConsumerKey, pSignatureMethod, pSite) {
+const SOCIALACCESSTOKEN = "Social.js-AccessToken-";
+
+var OAuthAdapter = function(pService, pConsumerSecret, pConsumerKey, pSignatureMethod) {
 	function showLoading() {
 		if (loading)
 			return;
@@ -10,7 +12,7 @@ var OAuthAdapter = function(pConsumerSecret, pConsumerKey, pSignatureMethod, pSi
 	}
 
 	function authorizeUICallback(e) {
-		switch (pSite) {
+		switch (pService) {
 			case 'linkedin' :
 				var response = e.source.evalJS("(p = document.getElementsByClassName(\"access-code\")) && p[0].innerHTML");
 				response ? ( pin = response, destroyAuthorizeUI(), receivePinCallback()) : (loadingView && loadingView.hide(), loadingContainer && loadingContainer.hide(), webView && webView.show()), loading = !1, clearInterval(intervalID), estimates[estimateID] = (new Date).getTime() - startTime, Ti.App.Properties.setString("Social-LoadingEstimates", JSON.stringify(estimates));
@@ -32,13 +34,16 @@ var OAuthAdapter = function(pConsumerSecret, pConsumerKey, pSignatureMethod, pSi
 	}, window = null, view = null, webView = null, loadingView = null, loadingContainer = null, receivePinCallback = null, accessTokenStore = {};
 
 	this.loadAccessToken = function(pService) {
+		console.log(pService);
 		var token;
 		if (accessTokenStore[pService])
 			token = accessTokenStore[pService];
 		else {
-			var raw = Ti.App.Properties.getString("Social.js-AccessToken-" + pService, "");
-			if (!raw)
+			var raw = Ti.App.Properties.getString(SOCIALACCESSTOKEN + pService, "");
+			if (!raw) {
+				console.log('Warning: no SOCIALACCESSTOKEN in store');
 				return;
+			}
 			try {
 				token = accessTokenStore[pService] = JSON.parse(raw);
 			} catch (err) {
@@ -52,10 +57,12 @@ var OAuthAdapter = function(pConsumerSecret, pConsumerKey, pSignatureMethod, pSi
 		accessTokenStore[pService] = {
 			accessToken : accessToken,
 			accessTokenSecret : accessTokenSecret
-		}, Ti.App.Properties.setString("Social.js-AccessToken-" + pService, JSON.stringify(accessTokenStore[pService]));
+		};
+		console.log(accessTokenStore);
+		Ti.App.Properties.setString(SOCIALACCESSTOKEN + pService, JSON.stringify(accessTokenStore[pService]));
 	};
 	this.clearAccessToken = function(pService) {
-		delete accessTokenStore[pService], Ti.App.Properties.setString("Social.js-AccessToken-" + pService, null), accessToken = null, accessTokenSecret = null;
+		delete accessTokenStore[pService], Ti.App.Properties.setString(SOCIALACCESSTOKEN + pService, null), accessToken = null, accessTokenSecret = null;
 	};
 	this.isAuthorized = function() {
 		return accessToken != null && accessTokenSecret != null;

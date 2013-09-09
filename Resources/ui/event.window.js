@@ -38,7 +38,7 @@ exports.create = function(_event) {
 					itemId : (session.mp4 || session.slides || session.hp) ? JSON.stringify(session) : {}
 				}
 			});
-			if (Ti.App.MultiSocial.isAuthorized())
+			if (Ti.App.XING.isAuthorized())
 				Ti.App.Model.getXINGProfile(session);
 		}
 		sections[0] = Ti.UI.createListSection({

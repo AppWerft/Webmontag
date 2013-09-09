@@ -55,21 +55,23 @@ exports.create = function() {
 		}).show();
 	}
 	xinglogin.addEventListener('click', function() {
-		Ti.App.MultiSocial.authorize(function(_e) {
+		Ti.App.XING.authorize(function(_e) {
 			self.listview.bottom = 0;
+			xinglogin.hide();
 		});
 	});
-	if (Ti.App.MultiSocial.isAuthorized()) {
+	if (Ti.App.XING.isAuthorized()) {
+		xinglogin.hide();
 		self.listview.bottom = 0;
-		Ti.App.MultiSocial.getUserXING({
+		Ti.App.XING.getUserXING({
 			onsuccess : function(_e) {
 				console.log(_e);
-
 			},
 			onerror : function(_e) {
 				console.log(_e);
 			},
 		});
+		
 	}
 
 	Ti.App.Model.getMembersTotal(function(_total) {
