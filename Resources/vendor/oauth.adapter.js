@@ -110,12 +110,18 @@ var OAuthAdapter = function(pConsumerSecret, pConsumerKey, pSignatureMethod, pSi
 	var self = this;
 	this.showLoadingUI = function() {
 		window = Ti.UI.createWindow({
-			top : 20,
-			zIndex : 1000,
-			fullscreen : true,
-			opacity : 0.9
-		}), Ti.Android || (window.opacity = 0, window.transform = Ti.UI.create2DMatrix().scale(0)), view = Ti.UI.createView({
-			backgroundColor : "#187F7F",
+			backgroundColor : "transparent",
+			zIndex : 1000
+		}), Ti.Android || (window.opacity = 0, window.transform = Ti.UI.create2DMatrix().scale(0));
+		var view = Ti.UI.createView({
+			top : 10,
+			right : 10,
+			bottom : 5,
+			left : 5,
+			backgroundColor : "#52D3FE",
+			borderColor : "#52D3FE",
+			borderRadius : 10,
+			borderWidth : 4,
 			zIndex : -1
 		});
 		var closeLabel = Ti.UI.createButton({
@@ -123,8 +129,8 @@ var OAuthAdapter = function(pConsumerSecret, pConsumerKey, pSignatureMethod, pSi
 				fontSize : 11,
 				fontWeight : "bold"
 			},
-			backgroundColor : "#187F7F",
-			borderColor : "#187F7F",
+			backgroundColor : "#52D3FE",
+			borderColor : "#52D3FE",
 			color : "#fff",
 			style : 0,
 			borderRadius : 6,
@@ -136,29 +142,29 @@ var OAuthAdapter = function(pConsumerSecret, pConsumerKey, pSignatureMethod, pSi
 		});
 		closeLabel.addEventListener("click", destroyAuthorizeUI), window.open();
 		var offset = 0;
-		Ti.Android && ( offset = 0), loadingContainer = Ti.UI.createView({
+		Ti.Android && ( offset = "10dp"), loadingContainer = Ti.UI.createView({
 			top : offset,
 			right : offset,
 			bottom : offset,
 			left : offset,
 			backgroundColor : "#fff"
 		}), loadingView = Ti.UI.createProgressBar({
+			top : 10,
 			right : 10,
 			bottom : 10,
 			left : 10,
 			min : 0,
 			max : 1,
 			value : 0.5,
-			message : "Lade Webseite, das kann dauern …",
+			message : "Loading, please wait.",
 			backgroundColor : "#fff",
 			font : {
 				fontSize : 14,
 				fontWeight : "bold"
 			},
 			style : 0
-		}), view.add(loadingContainer), loadingContainer.add(loadingView), loadingView.show(), window.add(view);
+		}), view.add(loadingContainer), loadingContainer.add(loadingView), loadingView.show(), window.add(view), window.add(closeLabel);
 		if (!Ti.Android) {
-			window.add(closeLabel);
 			var tooBig = Ti.UI.createAnimation({
 				transform : Ti.UI.create2DMatrix().scale(1.1),
 				opacity : 1,
@@ -175,16 +181,19 @@ var OAuthAdapter = function(pConsumerSecret, pConsumerKey, pSignatureMethod, pSi
 	};
 	this.showAuthorizeUI = function(pUrl, pReceivePinCallback) {
 		receivePinCallback = pReceivePinCallback;
-		var webView = Ti.UI.createWebView();
-		webView.addEventListener("beforeload", showLoading);
-		webView.addEventListener("load", authorizeUICallback);
-		view.add(webView);
-		webView.setUrl(pUrl);
+		var offset = 0;
+		Ti.Android && ( offset = "10dp"), webView = Ti.UI.createWebView({
+			url : pUrl,
+			top : offset,
+			right : offset,
+			bottom : offset,
+			left : offset,
+			autoDetect : [Ti.UI.AUTODETECT_NONE]
+		}), webView.addEventListener("beforeload", showLoading), webView.addEventListener("load", authorizeUICallback), view.add(webView);
 	};
 	this.getAccessToken = function(pUrl, callback) {
 		accessor.tokenSecret = requestTokenSecret;
 		var message = createMessage(pUrl);
-
 		message.parameters.push(["oauth_token", requestToken]), message.parameters.push(["oauth_verifier", pin]), OAuth.setTimestampAndNonce(message), OAuth.SignatureMethod.sign(message, accessor);
 		var parameterMap = OAuth.getParameterMap(message.parameters), client = Ti.Network.createHTTPClient({
 			onload : function() {
