@@ -7,7 +7,7 @@ var supportedSites = {
 		requestToken : "https://api.twitter.com/oauth/request_token",
 		authorize : "https://api.twitter.com/oauth/authorize?",
 		update : "https://api.twitter.com/1.1/statuses/update.json",
-		color: "#52D3FE"
+		color : "#52D3FE"
 	},
 	linkedin : {
 		accessToken : "https://api.linkedin.com/uas/oauth/accessToken",
@@ -22,11 +22,18 @@ var supportedSites = {
 		authorize : "https://api.xing.com/v1/authorize?",
 		callback : 'oob',
 		color : "#187F7F"
+	},
+	meetup : {
+		accessToken : "https://api.meetup.com/oauth/access/",
+		requestToken : "https://api.meetup.com/oauth/request/",
+		authorize : "http://www.meetup.com/authorize/?oauth_token=request_token_key",
+		api : 'http://api.meetup.com/',
+		color : "#187F7F"
 	}
 };
 
 var API = function(settings) {
-	this.adapter = new OAuthAdapter(settings.site,settings.consumerSecret, settings.consumerKey, "HMAC-SHA1");
+	this.adapter = new OAuthAdapter(settings.site, settings.consumerSecret, settings.consumerKey, "HMAC-SHA1");
 	this.adapter.loadAccessToken(settings.site);
 	this.urls = supportedSites[settings.site];
 	console.log(this);
@@ -51,6 +58,8 @@ API.prototype.authorize = function(callback) {
 				evt.success ? (self.adapter.saveAccessToken(self.site), callback && callback(true)) : alert("Did not get access token now!");
 			});
 		}
+
+
 		this.adapter.showLoadingUI(this.urls.color), this.adapter.getRequestToken(this.urls.requestToken, function(evt) {
 			evt.success ? self.adapter.showAuthorizeUI(self.urls.authorize + evt.token, receivePin) : alert("Did not get access token now!");
 		});

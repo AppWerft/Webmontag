@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?><ti:app xmlns:ti="http://ti.appcelerator.org">
+<?xml version="1.0" encoding="UTF-8"?>
+<ti:app xmlns:ti="http://ti.appcelerator.org">
     <id>de.appwerft.webmontag</id>
     <name>Webmontag</name>
     <version>1.0</version>
@@ -30,7 +31,10 @@
     <android xmlns:android="http://schemas.android.com/apk/res/android">
         <manifest>
             <application>
-                <activity android:configChanges="keyboardHidden" android:label="" android:name="ti.modules.titanium.media.TiVideoActivity" android:screenOrientation="landscape" android:theme="@android:style/Theme.NoTitleBar.Fullscreen"/>
+                <activity android:configChanges="keyboardHidden"
+                    android:label=""
+                    android:name="ti.modules.titanium.media.TiVideoActivity"
+                    android:screenOrientation="landscape" android:theme="@android:style/Theme.NoTitleBar.Fullscreen"/>
             </application>
         </manifest>
     </android>
@@ -47,4 +51,6 @@
     <property name="ti.deploytype">test</property>
     <property name="xing.appid">d28485f4eed93ef87c10</property>
     <property name="xing.appsecret">e7002eec4396cd72cea0927170e0235039cce998</property>
+    <property name="meetup.appid">73qhgsn1g6e8oehlpagkiq1uvo</property>
+    <property name="meetup.appsecret">s5ocg6gv9tgm3613n5f3ooi4as</property>
 </ti:app>

@@ -5,12 +5,12 @@
 	Ti.UI.orientation = Ti.UI.PORTRAIT;
 	var Webmontag = require('model/webmontag');
 	Ti.App.Model = new Webmontag();
-	var MS = require('vendor/multisocial.api');
-	Ti.App.XING = new MS({
+	var SocialModul = require('vendor/multisocial.api');
+	Ti.App.XING = new SocialModul({
 		site : "xing",
 		consumerSecret : Ti.App.Properties.getString('xing.appsecret'),
 		consumerKey : Ti.App.Properties.getString('xing.appid')
-	});
+	});	
 	require('ui/home.window').create();
 })();
 

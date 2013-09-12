@@ -1,9 +1,9 @@
-#appname: Webmontag
-#appid: de.appwerft.webmontag
-#type: mobile
-#guid: 05729368-27c4-4e15-ac73-21a4b0c5f316
-#version: 1.0
-#publisher: not specified
-#url: not specified
-#image: appicon.png
-#desc: not specified
+#appname:Webmontag
+#appid:de.appwerft.webmontag
+#type:mobile
+#guid:05729368-27c4-4e15-ac73-21a4b0c5f316
+#version:1.0
+#publisher:fuerst
+#url:http://
+#image:appicon.png
+#desc:not specified

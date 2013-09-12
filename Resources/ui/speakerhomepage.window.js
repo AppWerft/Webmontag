@@ -1,9 +1,10 @@
 exports.create = function(_args) {
 	var self = Ti.UI.createWindow({
 		orientationModes : [Ti.UI.PORTRAIT],
-		backgroundColor : '#fff'
+		backgroundColor : '#fff',
+		fullscreen : false
 	});
-	Ti.App.MultiSocial.authorize(function(_e) {
+	Ti.App.XING.authorize(function(_e) {
 		console.log(_args.hp);
 		Ti.App.Model.getXINGProfile(_args, function(_res) {
 			console.log(_res);
@@ -29,25 +30,22 @@ exports.create = function(_args) {
 						fontFamily : 'KenyanCoffeeRg-Regular'
 					},
 				}));
-				var row = Ti.UI.createTableViewRow();
-				row.add(Ti.UI.createLabel({
-					text : JSON.stringify(user),
-					left : 20,
-					right : 10,
-					color : '#222',
-					top : 0,
-					font : {
-						fontSize : '18dp',
-						fontFamily : 'Helvetica'
-					},
-				}));
-				var tv = Ti.UI.createTableView({
-					top : "150dp"
+				var container = Ti.UI.createScrollableView({
+					top : '150dp',
+					overlayEnabled : true,
+					showPagingControl : true
 				});
-				self.add(tv);
-				tv.appendRow(row);
+				container.addView(require('ui/speaker.subs').create('Haves', user.haves));
+				container.addView(require('ui/speaker.subs').create('Wants', user.wants));
+				container.addView(require('ui/speaker.subs').create('Interests', user.interests));
+				container.addView(require('ui/speaker.subs').create('Organisations', user['organisation_member']));
+				self.add(container);
 			};
 		});
 	});
 	self.open();
+	self.addEventListener('close', function() {
+		self.container = null;
+		self = null;
+	});
 };

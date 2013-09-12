@@ -2,7 +2,7 @@ exports.create = function() {
 	var w = Ti.Platform.displayCaps.platformWidth;
 	var self = Ti.UI.createWindow({
 		title : "WebMontag in Hamburg",
-		fullscreen : true,
+		fullscreen : false,
 		orientationModes : [Ti.UI.PORTRAIT],
 		exitOnClose : true,
 		backgroundColor : '#ddd'
@@ -60,6 +60,9 @@ exports.create = function() {
 			xinglogin.hide();
 		});
 	});
+	
+	
+	
 	if (Ti.App.XING.isAuthorized()) {
 		xinglogin.hide();
 		self.listview.bottom = 0;

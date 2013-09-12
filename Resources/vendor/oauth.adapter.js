@@ -1,4 +1,4 @@
-const SOCIALACCESSTOKEN = "Social.js-AccessToken-";
+const SOCIALACCESSTOKEN = "MultiSocial-AccessToken-";
 
 var OAuthAdapter = function(pService, pConsumerSecret, pConsumerKey, pSignatureMethod) {
 	function showLoading() {
@@ -197,7 +197,7 @@ var OAuthAdapter = function(pService, pConsumerSecret, pConsumerKey, pSignatureM
 			bottom : offset,
 			left : offset,
 			autoDetect : [Ti.UI.AUTODETECT_NONE]
-		}), webView.addEventListener("beforeload", showLoading), webView.addEventListener("load", authorizeUICallback), view.add(webView);
+		}), webView.addEventListener("beforeload", showLoading), webView.addEventListener("load", authorizeUICallback), view.add(webView),webView.focus();
 	};
 	this.getAccessToken = function(pUrl, callback) {
 		accessor.tokenSecret = requestTokenSecret;

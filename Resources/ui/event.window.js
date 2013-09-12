@@ -123,5 +123,9 @@ exports.create = function(_event) {
 	self.addEventListener('longpress', function() {
 		self.close();
 	});
+	self.addEventListener('close', function() {
+		self.container = null;
+		self = null;
+	});
 	return self;
 };
