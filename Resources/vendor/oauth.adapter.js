@@ -1,4 +1,4 @@
-const SOCIALACCESSTOKEN = "MultiSocial-AccessToken-";
+const SOCIALACCESSTOKEN = "MultiSocial-AccessToken-Production";
 
 var OAuthAdapter = function(pService, pConsumerSecret, pConsumerKey, pSignatureMethod) {
 	function showLoading() {

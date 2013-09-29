@@ -92,7 +92,6 @@ exports.session = {
 				fontFamily : 'KenyanCoffeeRg-Regular'
 			},
 			left : "100dp",
-			right : '20dp',
 			width : Ti.UI.FILL,
 			bubbles : true,
 			top : '5dp',

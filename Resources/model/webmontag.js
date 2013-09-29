@@ -4,11 +4,7 @@ var WebMon = function() {
 };
 
 WebMon.prototype.getXINGProfile = function(_profile, _callback) {
-	if (!_profile.hp) {
-		console.log('Warning: no profile');
-		return;
-	}
-	var user = _profile.hp.split(/\/profiles\//)[1];
+		var user = ( typeof (_profile) == 'object' && _profile.hp ) ? _profile.hp.split(/\/profiles\//)[1] : _profile;
 	console.log('Info: retrieving profile ' + user);
 	if (this.profiles[user]) {
 		console.log('Info: profile in storage');
@@ -28,6 +24,10 @@ WebMon.prototype.getXINGProfile = function(_profile, _callback) {
 			_callback && _callback({
 				success : true,
 				data : self.profiles[user]
+			});
+		} else {
+			_callback && _callback({
+				success : false
 			});
 		}
 	});

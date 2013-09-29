@@ -34,8 +34,8 @@ exports.create = function(_event) {
 				},
 				properties : {
 					//allowsSelection : true,
-					accessoryType : (session.mp4 || session.slides || session.hp) ? Ti.UI.LIST_ACCESSORY_TYPE_DETAIL : Ti.UI.LIST_ACCESSORY_TYPE_NONE,
-					itemId : (session.mp4 || session.slides || session.hp) ? JSON.stringify(session) : {}
+					accessoryType : (session.mp4 || session.uid || session.slides || session.hp) ? Ti.UI.LIST_ACCESSORY_TYPE_DETAIL : Ti.UI.LIST_ACCESSORY_TYPE_NONE,
+					itemId : (session.mp4 || session.uid || session.slides || session.hp) ? JSON.stringify(session) : {}
 				}
 			});
 			if (Ti.App.XING.isAuthorized())
@@ -51,15 +51,28 @@ exports.create = function(_event) {
 		var options = [], actions = [];
 		if (event.mp4) {
 			options.push('VideoPodcast');
-			actions.push('video');
+			actions.push({
+				video : true
+			});
 		}
 		if (event.hp && event.speaker) {
 			options.push(event.speaker + '@XING');
-			actions.push('web');
+			actions.push({
+				xing : event.speaker
+			});
+		} else if (event.uid) {
+			for (var i = 0; i < event.uid.length; i++) {
+				options.push(event.uid[i] + '@XING');
+				actions.push({
+					xing : event.uid[i]
+				});
+			}
 		}
 		if (event.slides) {
 			options.push('Slides');
-			actions.push('slides');
+			actions.push({
+				slides : true
+			});
 		}
 		var dialog = Ti.UI.createOptionDialog({
 			options : options,
@@ -68,12 +81,15 @@ exports.create = function(_event) {
 		if (options.length)
 			dialog.show();
 		dialog.addEventListener('click', function(_d) {
-			switch (actions[_d.index]) {
+			for (var action in actions[_d.index]) {
+			}
+			switch (action) {
 				case 'video':
 					require('ui/video.widget').create(event);
 					break;
-				case 'web':
-					require('ui/speakerhomepage.window').create(event);
+				case 'xing':
+					console.log('XING-Mitspieler='+actions[_d.index][action]);
+					require('ui/speakerhomepage.window').create(actions[_d.index][action]);
 					break;
 				case 'slides':
 					var progresswidget = require('ui/progress.widget').create();

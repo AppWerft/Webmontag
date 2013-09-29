@@ -1,6 +1,5 @@
 //https://bitbucket.org/miroslavmagda/google-auth-for-titanium/src/a7c8298144a00c460add7dca15814a0685be3308/module/googleAuth.js?at=master
 
-
 /*
  * Google account authentfication library / module
  * by Miroslav Magda, blog.ejci.net,
@@ -38,22 +37,20 @@ var GoogleAuth = function(o) {
 		if (!_opt.quiet) {
 			Ti.API.error('' + t);
 		}
-	}
-	log.info = function(t) {
+	}, log.info = function(t) {
 		if (!_opt.quiet) {
 			Ti.API.info(t);
 		}
-	}
-	log.debug = function(t) {
+	}, log.debug = function(t) {
 		if (!_opt.quiet) {
 			Ti.API.debug('' + t);
 		}
-	}
-	log.trace = function(t) {
+	}, log.trace = function(t) {
 		if (!_opt.quiet) {
 			Ti.API.trace('' + t);
 		}
-	}//UTILS
+	};
+	//UTILS
 
 	log.info('-------------------------------------');
 	log.info('| Google Account Authentification   |');
@@ -260,7 +257,7 @@ var GoogleAuth = function(o) {
 			client_secret : _opt.clientSecret,
 			refresh_token : _prop.refreshToken,
 			grant_type : 'refresh_token'
-		}
+		};
 		// Send the request.
 		xhr.send(d);
 	}
@@ -315,7 +312,7 @@ var GoogleAuth = function(o) {
 			client_secret : _opt.clientSecret,
 			redirect_uri : 'urn:ietf:wg:oauth:2.0:oob',
 			grant_type : 'authorization_code'
-		}
+		};
 		// Send the request.
 		xhr.send(d);
 	}
@@ -366,7 +363,7 @@ var GoogleAuth = function(o) {
 		refreshToken : refreshToken,
 		authorize : authorize,
 		version : _version
-	}
+	};
 };
 
 module.exports = GoogleAuth;

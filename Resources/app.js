@@ -16,8 +16,8 @@
 
 /*
 
- scp /Users/fuerst/Documents/Titanium\ Studio\ Workspace/lecture2go/build/iphone/build/Debug-iphoneos/*.ipa ra1n3r@webmasterei.com:/hausweb/tools/l2g
-
+ scp /Users/rainerschleevoigt/Documents/TitaniumStudioWorkspace/Webmontag/build/android/bin/app.apk ra1n3r@webmasterei.com:/mume/webmontag.apk
+ 
  https://shib.stine.uni-hamburg.de/idp/Authn/UserPassword
  https://uhh-srv-olatweb.rrz.uni-hamburg.de/olat/dmz/
 

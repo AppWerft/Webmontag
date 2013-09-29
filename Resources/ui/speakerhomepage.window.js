@@ -7,7 +7,6 @@ exports.create = function(_args) {
 	Ti.App.XING.authorize(function(_e) {
 		console.log(_args.hp);
 		Ti.App.Model.getXINGProfile(_args, function(_res) {
-			console.log(_res);
 			if (_res.success == true) {
 				var user = _res.data.users[0];
 				console.log(user);
@@ -40,6 +39,12 @@ exports.create = function(_args) {
 				container.addView(require('ui/speaker.subs').create('Interests', user.interests));
 				container.addView(require('ui/speaker.subs').create('Organisations', user['organisation_member']));
 				self.add(container);
+			} else {
+				var dialog = Ti.UI.createAlertDialog({
+					message : 'Wie schon erwähnt benötigt die App das Internet. Das XING-Profilist nicht besorgbar.',
+					ok : 'Okay',
+					title : 'Internet fehlt'
+				}).show();
 			};
 		});
 	});

@@ -1,0 +1,10 @@
+android/ATTR_MINIFY=true
+android/ATTR_PROJECT_NAME=Webmontag
+android/abi=armeabi-v7a
+android/distribute_path=/Users/rainerschleevoigt/Documents/TitaniumStudioWorkspace/Webmontag
+android/keystore_alias=googlekey
+android/keystore_password=*MHpsNH
+android/keystore_path=/Users/rainerschleevoigt/.android.keystore
+android/recent_output=/Users/rainerschleevoigt/Documents/TitaniumStudioWorkspace/Webmontag
+android/sdk_version=Google APIs (Android 4.0)
+eclipse.preferences.version=1
